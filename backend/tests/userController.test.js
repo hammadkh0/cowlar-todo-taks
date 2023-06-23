@@ -1,7 +1,11 @@
+/* eslint-disable no-undef */
 const request = require("supertest");
-const app = require("../server"); // Assuming your server file is named 'server.js'
+const app = require("../test.server"); // Assuming your server file is named 'test.server.js'
 const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
+// const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config({ path: "./.env" });
 
 describe("User Controller", () => {
   describe("signup", () => {
