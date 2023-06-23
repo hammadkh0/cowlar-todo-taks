@@ -8,8 +8,10 @@ export const LoginForm = ({ navigate }) => {
   const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = (e) => {
+    setLoading(true);
     e.preventDefault();
     fetch(`${VITE_BACKEND_URL}/api/v1/users/login`, {
       method: "POST",
@@ -27,6 +29,7 @@ export const LoginForm = ({ navigate }) => {
           return;
         }
         toastSuccess("Login Successfull");
+        setLoading(false);
         setTimeout(() => {
           localStorage.setItem("jwt", data.token);
           localStorage.setItem("user", JSON.stringify({ name: data.name, image: data.image }));
@@ -35,6 +38,7 @@ export const LoginForm = ({ navigate }) => {
       })
       .catch((err) => {
         toastError(err.message);
+        setLoading(false);
       });
   };
   return (
@@ -74,7 +78,7 @@ export const LoginForm = ({ navigate }) => {
             </div>
 
             <button className="auth-btn" type="submit">
-              Login
+              {!loading ? "Login" : "Logging in...."}
             </button>
           </form>
         </div>
@@ -89,9 +93,10 @@ export const SignupForm = ({ navigate }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [imagePreview, setImagePreview] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const handleSignup = (e) => {
     e.preventDefault();
+    setLoading(true);
     console.log({ name, email, password, imagePreview });
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/signup`, {
       method: "POST",
@@ -109,13 +114,17 @@ export const SignupForm = ({ navigate }) => {
           return;
         }
         toastSuccess("Signup Successfull");
+        setLoading(false);
         setTimeout(() => {
           localStorage.setItem("jwt", data.token);
           localStorage.setItem("user", JSON.stringify({ name: data.name, image: data.image }));
           navigate("/");
         }, 1500);
       })
-      .catch((err) => toastError(err.message));
+      .catch((err) => {
+        toastError(err.message);
+        setLoading(false);
+      });
   };
 
   const handleImageChange = (e) => {
@@ -188,7 +197,7 @@ export const SignupForm = ({ navigate }) => {
               />
             </div>
             {imagePreview && <img src={imagePreview} alt="Selected" style={{ width: "100px" }} />}
-            <button className="auth-btn">Signup</button>
+            <button className="auth-btn">{!loading ? "Signup" : "Signing in..."}</button>
           </form>
         </div>
       </div>
