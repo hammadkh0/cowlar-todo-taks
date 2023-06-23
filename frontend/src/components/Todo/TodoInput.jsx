@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { BsPlus } from "react-icons/bs";
 import { IoSendSharp } from "react-icons/io5";
-
-const TodoInput = ({ handleSubmit, inputRef }) => {
+import { ImSpinner3 } from "react-icons/im";
+const TodoInput = ({ handleSubmit, inputRef, loading }) => {
   return (
     <form
       className="flex w-[40%] my-0 mx-auto gap-[10px] bg-[#424242a4] rounded-lg mt-4 p-[10px]"
@@ -23,7 +23,11 @@ const TodoInput = ({ handleSubmit, inputRef }) => {
         placeholder="Add Task"
         ref={inputRef}
       />
-      <IoSendSharp size={25} color="white" onClick={handleSubmit} />
+      {!loading ? (
+        <IoSendSharp size={25} color="white" onClick={handleSubmit} />
+      ) : (
+        <ImSpinner3 size={25} color="white" />
+      )}
     </form>
   );
 };

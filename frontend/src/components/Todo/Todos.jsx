@@ -9,6 +9,7 @@ import TodoInput from "./TodoInput";
 function Todos() {
   const inputRef = useRef(null);
   const [Todos, setTodos] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
@@ -49,8 +50,12 @@ function Todos() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     // If input is empty return.
-    if (!inputRef.current.value) return;
+    if (!inputRef.current.value) {
+      setLoading(false);
+      return;
+    }
     if (!isLoggedIn) {
       const updatedTodos = [
         ...Todos,
@@ -63,6 +68,7 @@ function Todos() {
       ];
       localStorage.setItem("saveLater", JSON.stringify(updatedTodos));
       setTodos(updatedTodos);
+      setLoading(false);
       inputRef.current.value = "";
     } else {
       fetch(`${VITE_BACKEND_URL}/api/v1/todos`, {
@@ -76,7 +82,12 @@ function Todos() {
         .then((res) => res.json())
         .then((data) => {
           setTodos([...Todos, data]);
+          setLoading(false);
           inputRef.current.value = "";
+        })
+        .catch((err) => {
+          toastError(err.message);
+          setLoading(false);
         });
     }
   };
@@ -213,7 +224,7 @@ function Todos() {
         ))}
       </div>
 
-      <TodoInput handleSubmit={handleSubmit} inputRef={inputRef} />
+      <TodoInput handleSubmit={handleSubmit} inputRef={inputRef} loading={loading} />
     </>
   );
 }
