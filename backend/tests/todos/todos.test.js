@@ -1,13 +1,13 @@
 /* eslint-disable no-undef */
-const Todo = require("../models/todoModel");
-const TodoController = require("../controllers/todoController");
+const Todo = require("./todoModel");
+const TodoController = require("./todoController");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-dotenv.config({ path: "./.env" });
+dotenv.config({ path: "../.env" });
 
 // Mocking the required models
-jest.mock("../models/todoModel");
-jest.mock("../models/userModel");
+jest.mock("./todoModel");
+jest.mock("../users/userModel");
 
 beforeAll(async () => {
   await mongoose.connect(process.env.TEST_DATABASE_URL, {
