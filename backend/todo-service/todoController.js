@@ -1,5 +1,6 @@
-const Todo = require("../models/todoModel");
-const User = require("../models/userModel");
+const jwt = require("jsonwebtoken");
+const Todo = require("./todoModel");
+const User = require("./userModel");
 
 exports.getAllTodos = async (req, res) => {
   try {
@@ -76,5 +77,32 @@ exports.updateTodo = async (req, res) => {
     res.status(200).json({ status: "success", todo });
   } catch (error) {
     res.status(404).json({ message: error.message });
+  }
+};
+exports.protect = (req, res, next) => {
+  if (!req.headers.authorization) {
+    return res.status(401).json({ status: "fail", message: "Token not provided" });
+  } else {
+    const token = req.headers.authorization.split(" ")[1];
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      if (err) {
+        return res
+          .status(401)
+          .json({ status: "fail", message: "You are not logged in. Please log in to get access." });
+      } else {
+        // get the user from db based on token id
+        let user;
+        try {
+           user = await User.findById(decoded.id);
+          
+        } catch (error) {
+          return res.status(401).json({ status: "fail", message: error.message });
+        }
+        // add user to req object
+        req.user = user;
+        // call next middleware and now it will contain the user object
+        next();
+      }
+    });
   }
 };

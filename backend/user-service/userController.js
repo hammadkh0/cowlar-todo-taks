@@ -1,9 +1,9 @@
-const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const bcrypt = require("bcryptjs");
 
-dotenv.config({ path: "../config.env" });
+const User = require("./userModel");
+dotenv.config({ path: "../.env" });
 
 exports.signup = async (req, res) => {
   try {
@@ -68,7 +68,13 @@ exports.protect = (req, res, next) => {
           .json({ status: "fail", message: "You are not logged in. Please log in to get access." });
       } else {
         // get the user from db based on token id
-        const user = await User.findById(decoded.id);
+        let user;
+        try {
+           user = await User.findById(decoded.id);
+          
+        } catch (error) {
+          return res.status(401).json({ status: "fail", message: error.message });
+        }
         // add user to req object
         req.user = user;
         // call next middleware and now it will contain the user object

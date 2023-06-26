@@ -5,8 +5,9 @@ const {
   saveAllTodos,
   deleteTodo,
   updateTodo,
-} = require("../controllers/todoController");
-const { protect } = require("../controllers/userController");
+  protect,
+} = require("./todoController");
+// const { protect } = require("../user-service/userController");
 
 const router = express.Router();
 
