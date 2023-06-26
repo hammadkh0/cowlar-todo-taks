@@ -109,7 +109,7 @@ Before you begin, ensure that you have the following installed:
    docker-compose up
    ```
 
-- This will start the frontend app on `http://localhost:5173` and backend server on `http://localhost:3000`.
+- This will start the frontend app on `http://localhost:5173` , user-service will be on `http://localhost:5000` and the todo-service will be on `http://localhost:50001`.
 8. Testing
   - Make sure that the `TEST_DATABASE_URL` is in the .env file
   - Go to the backend/tests folder and run the command
