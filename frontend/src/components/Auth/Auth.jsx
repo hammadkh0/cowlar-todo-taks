@@ -5,7 +5,7 @@ import { toastError, toastSuccess } from "../../utils/toastMessages";
 
 // eslint-disable-next-line react/prop-types
 export const LoginForm = ({ navigate }) => {
-  const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  const VITE_USER_SERVICE_URL = import.meta.env.VITE_USER_SERVICE_URL || "http://localhost:5000";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -13,7 +13,7 @@ export const LoginForm = ({ navigate }) => {
   const handleLogin = (e) => {
     setLoading(true);
     e.preventDefault();
-    fetch(`${VITE_BACKEND_URL}/api/v1/users/login`, {
+    fetch(`${VITE_USER_SERVICE_URL}/api/v1/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -89,6 +89,7 @@ export const LoginForm = ({ navigate }) => {
 
 // eslint-disable-next-line react/prop-types
 export const SignupForm = ({ navigate }) => {
+  const VITE_USER_SERVICE_URL = import.meta.env.VITE_USER_SERVICE_URL || "http://localhost:5000";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -98,7 +99,7 @@ export const SignupForm = ({ navigate }) => {
     e.preventDefault();
     setLoading(true);
     console.log({ name, email, password, imagePreview });
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/signup`, {
+    fetch(`${VITE_USER_SERVICE_URL}/api/v1/users/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

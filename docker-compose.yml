@@ -8,18 +8,20 @@ services:
     ports:
       - "5173:5173"
     environment:
-      - VITE_BACKEND_URL=http://localhost:5000
+      - VITE_USER_SERVICE_URL=http://localhost:5000
+      - VITE_TODO_SERVICE_URL=http://localhost:5001
     volumes:
       - ./frontend:/app
       - /app/node_modules
     networks:
       - todo-net
     depends_on:
-      - backend
-  backend:
-    build: ./backend
-    image: todo-backend
-    container_name: todo-backend-container
+      - user-service
+      - todo-service
+  user-service:
+    build: ./backend/user-service
+    image: user-service
+    container_name: user-container
     ports:
       - "5000:5000"
     environment:
@@ -28,7 +30,23 @@ services:
       - JWT_SECRET=never_gonna_give_you_up
       - JWT_EXPIRES_IN = 86400
     volumes:
-      - ./backend:/app
+      - ./backend/user-service:/app
+      - /app/node_modules
+    networks:
+      - todo-net
+  todo-service:
+    build: ./backend/todo-service
+    image: todo-service
+    container_name: todo-container
+    ports:
+      - "5001:5001"
+    environment:
+      - DATABASE_URL=mongodb+srv://todo-user:w3rvNEgfKRz2NEl7@cluster0.depajlm.mongodb.net/todo-project
+      - TEST_DATABASE_URL=DATABASE_URL=mongodb+srv://todo-user:w3rvNEgfKRz2NEl7@cluster0.depajlm.mongodb.net/todo-test
+      - JWT_SECRET=never_gonna_give_you_up
+      - JWT_EXPIRES_IN = 86400
+    volumes:
+      - ./backend/todo-service:/app
       - /app/node_modules
     networks:
       - todo-net

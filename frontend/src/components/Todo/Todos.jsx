@@ -12,7 +12,7 @@ function Todos() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  const VITE_TODO_SERVICE_URL = import.meta.env.VITE_TODO_SERVICE_URL || "http://localhost:5001";
 
   const isLoggedIn = !!localStorage.getItem("jwt");
   /**
@@ -32,7 +32,7 @@ function Todos() {
     if (!jwt) {
       setTodos(todos);
     } else {
-      fetch(`${VITE_BACKEND_URL}/api/v1/todos`, {
+      fetch(`${VITE_TODO_SERVICE_URL}/api/v1/todos`, {
         headers: { Authorization: `Bearer ${jwt}` },
       })
         .then((res) => res.json())
@@ -46,7 +46,7 @@ function Todos() {
     return () => {
       setTodos([]);
     };
-  }, [VITE_BACKEND_URL]);
+  }, [VITE_TODO_SERVICE_URL]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -71,7 +71,7 @@ function Todos() {
       setLoading(false);
       inputRef.current.value = "";
     } else {
-      fetch(`${VITE_BACKEND_URL}/api/v1/todos`, {
+      fetch(`${VITE_TODO_SERVICE_URL}/api/v1/todos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +94,7 @@ function Todos() {
 
   const deleteTodo = (id) => {
     if (isLoggedIn && !localTodos.includes(id)) {
-      fetch(`${VITE_BACKEND_URL}/api/v1/todos/${id}`, {
+      fetch(`${VITE_TODO_SERVICE_URL}/api/v1/todos/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt")}`,
@@ -112,7 +112,7 @@ function Todos() {
   const handleCompletion = async (id) => {
     if (isLoggedIn && !localTodos.includes(id)) {
       // if user is logged in, then update todo on backend.
-      const response = await fetch(`${VITE_BACKEND_URL}/api/v1/todos/${id}`, {
+      const response = await fetch(`${VITE_TODO_SERVICE_URL}/api/v1/todos/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -156,7 +156,7 @@ function Todos() {
     // 1. Remove the integer id from the locally saved todos.
     const todosToSave = Todos.map((todo) => ({ ...todo, id: undefined }));
     // 2. Send the todos to backend to save them.
-    fetch(`${VITE_BACKEND_URL}/api/v1/todos/saveAll`, {
+    fetch(`${VITE_TODO_SERVICE_URL}/api/v1/todos/saveAll`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
