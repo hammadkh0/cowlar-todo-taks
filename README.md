@@ -46,13 +46,17 @@ Before you begin, ensure that you have the following installed:
     ```shell
    cd ../backend
    ```
+   First install for the user service by `cd user-service`. then run the command:
    Install the packages with either
    ```shell
    npm install 
    ```
+   or
    ```
    yarn install
    ```
+
+   Repeat the same for the todo-service. `cd ../todo-service` and then install the packages.
 
 5. Add `environemnt variables`
     In the backend folder copy the example.env file and create a .env file and paste it there
@@ -65,18 +69,20 @@ Before you begin, ensure that you have the following installed:
 
 6. Start the servers
     - Backend:
+      Go to the user-service folder and then run the command:
     ```shell
    cd backend
    npm start
    ```
-
+      Repeat the same for the todo-service folder.
+   
    - Frontend:
    ```shell
    cd ../frontend
    npm run dev
    ```
 
-7. Run the app through `docker`
+8. Run the app through `docker`
  
      To run the Task Manager App using Docker, follow these steps:
 - Clone the repository:
@@ -103,10 +109,10 @@ Before you begin, ensure that you have the following installed:
    docker-compose up
    ```
 
-- This will start the frontend app on `http://localhost:5173` and backend server on `http://localhost:3000`.
+- This will start the frontend app on `http://localhost:5173` , user-service will be on `http://localhost:5000` and the todo-service will be on `http://localhost:5001`.
 8. Testing
   - Make sure that the `TEST_DATABASE_URL` is in the .env file
-  - Go to the backend folder and run the command
+  - Go to the backend/tests folder and run the command
      ``` shell
      npm run test
      ```
