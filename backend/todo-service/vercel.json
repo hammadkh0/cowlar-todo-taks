@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "todo-service.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "todo-service.js"
+    }
+  ]
+}
