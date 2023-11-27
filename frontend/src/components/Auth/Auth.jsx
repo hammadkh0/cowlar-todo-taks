@@ -1,45 +1,31 @@
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { toastError, toastSuccess } from "../../utils/toastMessages";
+import { login, signup } from "../../services/authApi";
 
 // eslint-disable-next-line react/prop-types
 export const LoginForm = ({ navigate }) => {
   const VITE_USER_SERVICE_URL = import.meta.env.VITE_USER_SERVICE_URL || "http://localhost:5000";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     setLoading(true);
     e.preventDefault();
-    fetch(`${VITE_USER_SERVICE_URL}/api/v1/users/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({ email, password }),
-      mode: "cors",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === "fail") {
-          toastError(data.message);
-          return;
-        }
-        toastSuccess("Login Successfull");
-        setLoading(false);
-        setTimeout(() => {
-          localStorage.setItem("jwt", data.token);
-          localStorage.setItem("user", JSON.stringify({ name: data.name, image: data.image }));
-          navigate("/");
-        }, 1500);
-      })
-      .catch((err) => {
-        toastError(err.message);
-        setLoading(false);
-      });
+
+    const data = await login(VITE_USER_SERVICE_URL, email, password);
+
+    setLoading(false);
+
+    if (data === null) return;
+
+    setTimeout(() => {
+      localStorage.setItem("jwt", data.token);
+      localStorage.setItem("user", JSON.stringify({ name: data.name, image: data.image }));
+      navigate("/");
+    }, 1500);
   };
   return (
     <>
@@ -90,42 +76,28 @@ export const LoginForm = ({ navigate }) => {
 // eslint-disable-next-line react/prop-types
 export const SignupForm = ({ navigate }) => {
   const VITE_USER_SERVICE_URL = import.meta.env.VITE_USER_SERVICE_URL || "http://localhost:5000";
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [loading, setLoading] = useState(false);
-  const handleSignup = (e) => {
+
+  const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
     console.log({ name, email, password, imagePreview });
-    fetch(`${VITE_USER_SERVICE_URL}/api/v1/users/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({ name, email, password, image: imagePreview }),
-      mode: "cors",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === "fail") {
-          toastError(data.message);
-          return;
-        }
-        toastSuccess("Signup Successfull");
-        setLoading(false);
-        setTimeout(() => {
-          localStorage.setItem("jwt", data.token);
-          localStorage.setItem("user", JSON.stringify({ name: data.name, image: data.image }));
-          navigate("/");
-        }, 1500);
-      })
-      .catch((err) => {
-        toastError(err.message);
-        setLoading(false);
-      });
+
+    const data = await signup(VITE_USER_SERVICE_URL, name, email, password, imagePreview);
+
+    setLoading(false);
+    if (data === null) return;
+
+    setTimeout(() => {
+      localStorage.setItem("jwt", data.token);
+      localStorage.setItem("user", JSON.stringify({ name: data.name, image: data.image }));
+      navigate("/");
+    }, 1500);
   };
 
   const handleImageChange = (e) => {

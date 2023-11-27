@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import PropTypes from "prop-types";
 
 import { TbCircle, TbCircleCheckFilled } from "react-icons/tb";
-import { RxDragHandleDots2 } from "react-icons/rx";
+import { RxTrash } from "react-icons/rx";
 
 import bellSound from "../../assets/mixkit-achievement-bell-600-[AudioTrimmer.com].wav";
 import ConfirmationModal from "../Modal/ConfirmationModal";
@@ -76,7 +76,7 @@ function TodoItem({ todo, deleteTodo, onComplete }) {
           </p>
         </div>
         <span>
-          <RxDragHandleDots2
+          <RxTrash
             size={22}
             onClick={() => {
               setShow(true);
