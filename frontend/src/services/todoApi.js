@@ -79,7 +79,6 @@ export function updateTodoOnClient(Todos, id, localTodos) {
   const newTodos = Todos.map((todo) => {
     if (todo.id === id) {
       if (todo.completed) {
-        // if todo was completed, this means it will become incomplete so set the variable to False.
         didTodoComplete = false;
       }
       return {
@@ -96,7 +95,6 @@ export function updateTodoOnClient(Todos, id, localTodos) {
     "saveLater",
     JSON.stringify(newTodos.filter((todo) => localTodos.includes(todo.id)))
   );
-  // return boolean value to check if todo was completed or not.
   return { didTodoComplete, newTodos };
 }
 export async function updateTodoInDB(url, id) {
@@ -121,9 +119,8 @@ export async function updateTodoInDB(url, id) {
 
 export async function saveTodosToDB(Todos, url, setIsSaving) {
   setIsSaving(true);
-  // 1. Remove the integer id from the locally saved todos.
+  // Remove the integer id from the locally saved todos.
   const todosToSave = Todos.map((todo) => ({ ...todo, id: undefined }));
-  // 2. Send the todos to backend to save them.
   const res = await fetch(`${url}/api/v1/todos/saveAll`, {
     method: "POST",
     headers: {
@@ -141,7 +138,6 @@ export async function saveTodosToDB(Todos, url, setIsSaving) {
     setIsSaving(false);
     return;
   }
-  // 3. Clear the todos from localStorage.
   localStorage.setItem("saveLater", JSON.stringify([]));
   toastSuccess("Todos saved successfully!");
   setIsSaving(false);
@@ -150,6 +146,5 @@ export async function saveTodosToDB(Todos, url, setIsSaving) {
 export function logout() {
   localStorage.removeItem("jwt");
   localStorage.removeItem("user");
-  // refresh page to update navbar
   window.location.reload();
 }

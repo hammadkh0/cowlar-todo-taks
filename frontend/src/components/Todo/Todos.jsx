@@ -14,6 +14,7 @@ import {
   updateTodoInDB,
   updateTodoOnClient,
 } from "../../services/todoApi";
+import { variables } from "../../configs/variables";
 
 // eslint-disable-next-line react/prop-types
 function Todos() {
@@ -23,8 +24,7 @@ function Todos() {
   const [isSaving, setIsSaving] = useState(false);
   const navigate = useNavigate();
 
-  const VITE_TODO_SERVICE_URL = import.meta.env.VITE_TODO_SERVICE_URL || "http://localhost:5001";
-
+  const VITE_BACKEND_URL = variables.BACKEND_URL;
   const isLoggedIn = !!localStorage.getItem("jwt");
   /**
    * double bang (!!) converts the value to boolean.
@@ -44,7 +44,7 @@ function Todos() {
       if (!jwt) {
         setTodos(todos);
       } else {
-        const allTodos = await fetchAllTodos(VITE_TODO_SERVICE_URL, jwt, todos);
+        const allTodos = await fetchAllTodos(VITE_BACKEND_URL, jwt, todos);
         setTodos(allTodos);
       }
     }
@@ -54,7 +54,7 @@ function Todos() {
     return () => {
       setTodos([]);
     };
-  }, [VITE_TODO_SERVICE_URL]);
+  }, [VITE_BACKEND_URL]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,7 +73,7 @@ function Todos() {
       setLoading(false);
       inputRef.current.value = "";
     } else {
-      const createdTodo = await addTodoInDB(VITE_TODO_SERVICE_URL, inputRef);
+      const createdTodo = await addTodoInDB(VITE_BACKEND_URL, inputRef);
 
       if (createdTodo !== null) {
         setTodos([...Todos, createdTodo]);
@@ -85,7 +85,7 @@ function Todos() {
 
   const deleteTodo = async (id) => {
     if (isLoggedIn && !localTodos.includes(id)) {
-      await deleteTodoInDB(VITE_TODO_SERVICE_URL, id);
+      await deleteTodoInDB(VITE_BACKEND_URL, id);
     }
     const newTodos = deleteTodoOnClient(Todos, id, localTodos);
     setTodos(newTodos);
@@ -94,7 +94,7 @@ function Todos() {
   const handleCompletion = async (id) => {
     if (isLoggedIn && !localTodos.includes(id)) {
       // if user is logged in, then update todo on backend.
-      const isUpdated = await updateTodoInDB(VITE_TODO_SERVICE_URL, id);
+      const isUpdated = await updateTodoInDB(VITE_BACKEND_URL, id);
 
       if (!isUpdated) return;
     }
@@ -131,7 +131,7 @@ function Todos() {
           <button
             className="button bg-[#13a53f] text-white mr-4 p-[10px]"
             onClick={() => {
-              saveTodosToDB(Todos, VITE_TODO_SERVICE_URL, setIsSaving);
+              saveTodosToDB(Todos, VITE_BACKEND_URL, setIsSaving);
             }}
           >
             {isSaving ? "Saving" : "Save"} Todos to Database

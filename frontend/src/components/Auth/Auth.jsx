@@ -2,10 +2,11 @@ import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { login, signup } from "../../services/authApi";
+import { variables } from "../../configs/variables";
 
 // eslint-disable-next-line react/prop-types
 export const LoginForm = ({ navigate }) => {
-  const VITE_USER_SERVICE_URL = import.meta.env.VITE_USER_SERVICE_URL || "http://localhost:5000";
+  const VITE_BACKEND_URL = variables.BACKEND_URL;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,7 +16,7 @@ export const LoginForm = ({ navigate }) => {
     setLoading(true);
     e.preventDefault();
 
-    const data = await login(VITE_USER_SERVICE_URL, email, password);
+    const data = await login(VITE_BACKEND_URL, email, password);
 
     setLoading(false);
 
@@ -75,7 +76,7 @@ export const LoginForm = ({ navigate }) => {
 
 // eslint-disable-next-line react/prop-types
 export const SignupForm = ({ navigate }) => {
-  const VITE_USER_SERVICE_URL = import.meta.env.VITE_USER_SERVICE_URL || "http://localhost:5000";
+  const VITE_BACKEND_URL = variables.BACKEND_URL;
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -86,9 +87,8 @@ export const SignupForm = ({ navigate }) => {
   const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log({ name, email, password, imagePreview });
 
-    const data = await signup(VITE_USER_SERVICE_URL, name, email, password, imagePreview);
+    const data = await signup(VITE_BACKEND_URL, name, email, password, imagePreview);
 
     setLoading(false);
     if (data === null) return;

@@ -24,5 +24,6 @@ module.exports = {
     "comma-dangle": ["error", "always-multiline"],
     // semicolons are required
     semi: ["error", "always"],
+    spaceBeforeFunctionParenthesis: false,
   },
 };

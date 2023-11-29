@@ -1,6 +1,18 @@
-version: '2.0'
+version: "2.0"
 
 services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=todo-user
+      - MONGO_INITDB_ROOT_PASSWORD=w3rvNEgfKRz2NEl7
+    volumes:
+      - /data/db
+    networks:
+      - todo-net
   frontend:
     build: ./frontend
     image: todo-frontend
@@ -25,8 +37,8 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - DATABASE_URL=mongodb+srv://todo-user:w3rvNEgfKRz2NEl7@cluster0.depajlm.mongodb.net/todo-project
-      - TEST_DATABASE_URL=DATABASE_URL=mongodb+srv://todo-user:w3rvNEgfKRz2NEl7@cluster0.depajlm.mongodb.net/todo-test
+      - DATABASE_URL=mongodb://mongo:27017/todo-project
+      - TEST_DATABASE_URL=mongodb://mongo:27017/todo-test
       - JWT_SECRET=never_gonna_give_you_up
       - JWT_EXPIRES_IN=86400
     volumes:
@@ -41,8 +53,8 @@ services:
     ports:
       - "5001:5001"
     environment:
-      - DATABASE_URL=mongodb+srv://todo-user:w3rvNEgfKRz2NEl7@cluster0.depajlm.mongodb.net/todo-project
-      - TEST_DATABASE_URL=DATABASE_URL=mongodb+srv://todo-user:w3rvNEgfKRz2NEl7@cluster0.depajlm.mongodb.net/todo-test
+      - DATABASE_URL=mongodb://mongo:27017/todo-project
+      - TEST_DATABASE_URL=mongodb://mongo:27017/todo-test
       - JWT_SECRET=never_gonna_give_you_up
       - JWT_EXPIRES_IN=86400
     volumes:

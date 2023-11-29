@@ -1,13 +1,12 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   getAllTodos,
   createTodo,
   saveAllTodos,
   deleteTodo,
   updateTodo,
-  protect,
-} = require("./todoController");
-// const { protect } = require("../user-service/userController");
+} from "../controllers/todoController.js";
+import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -17,4 +16,5 @@ router.post("/", createTodo);
 router.post("/saveAll", saveAllTodos);
 router.delete("/:id", deleteTodo);
 router.patch("/:id", updateTodo);
-module.exports = router;
+
+export default router;

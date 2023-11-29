@@ -1,10 +1,13 @@
-const request = require("supertest");
-const app = require("../server");
-const User = require("./userModel");
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+import request from "supertest";
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+
+import User from "../../models/userModel";
+import app from "../server.js";
+import { variables } from "../../configs/variables";
+
 beforeAll(async () => {
-  await mongoose.connect(process.env.TEST_DATABASE_URL, {
+  await mongoose.connect(variables.DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });

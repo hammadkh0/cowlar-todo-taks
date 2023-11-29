@@ -8,7 +8,6 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 ENV PORT=5173
-ENV VITE_USER_SERVICE_URL=http://localhost:5000
-ENV VITE_TODO_SERVICE_URL=http://localhost:5001
+ENV VITE_BACKEND_URL=http://localhost:5000
 EXPOSE 5173
 CMD [ "npm", "run", "dev" ]

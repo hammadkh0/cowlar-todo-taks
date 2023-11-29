@@ -1,13 +1,10 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 
-const userRoutes = require("./users/userRoutes");
-const todoRoutes = require("./todos/todoRoutes");
-
-// Load env variables
-dotenv.config({ path: "../.env" });
+import userRoutes from "../routes/userRoutes";
+import { connectToDB } from "../configs/mongo";
+dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -17,21 +14,16 @@ app.use(express.json({ limit: "50mb" }));
 
 // Routes
 app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/todos", todoRoutes);
 
 // Connect to MongoDB
-mongoose
-  .connect(process.env.TEST_DATABASE_URL)
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
+connectToDB()
+  .then(
+    app.listen(5000, () => {
+      console.log("Test Server is running on port 5000");
+    })
+  )
   .catch((err) => {
-    console.log(err);
+    console.log(err.message);
   });
-
-//  Run the server
-app.listen(5000, () => {
-  console.log("Test Server is running on port 5000");
-});
 
 module.exports = app;

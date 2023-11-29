@@ -1,16 +1,16 @@
 /* eslint-disable no-undef */
-const Todo = require("./todoModel");
-const TodoController = require("./todoController");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-dotenv.config({ path: "../.env" });
+import mongoose from "mongoose";
+
+import { getAllTodos, deleteTodo } from "../../controllers/todoController";
+import Todo from "../../models/todoModel.js";
+import { variables } from "../../configs/variables.js";
 
 // Mocking the required models
-jest.mock("./todoModel");
-jest.mock("../users/userModel");
+jest.mock("../../models/todoModel.js");
+jest.mock("../../models/userModel.js");
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.TEST_DATABASE_URL, {
+  await mongoose.connect(variables.DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
@@ -35,7 +35,7 @@ describe("TodoController", () => {
       };
       const req = { user: { todos: ["1", "2"] } };
 
-      await TodoController.getAllTodos(req, mockResponse);
+      await getAllTodos(req, mockResponse);
 
       expect(Todo.find).toHaveBeenCalledWith({ _id: { $in: req.user.todos } });
       expect(mockResponse.status).toHaveBeenCalledWith(200);
@@ -52,7 +52,7 @@ describe("TodoController", () => {
       };
       const req = { user: { todos: ["1", "2"] } };
 
-      await TodoController.getAllTodos(req, mockResponse);
+      await getAllTodos(req, mockResponse);
 
       expect(Todo.find).toHaveBeenCalledWith({ _id: { $in: req.user.todos } });
       expect(mockResponse.status).toHaveBeenCalledWith(404);
@@ -77,7 +77,7 @@ describe("TodoController", () => {
 
       Todo.findByIdAndDelete.mockResolvedValue(mockDeletedTodo);
 
-      await TodoController.deleteTodo(req, mockResponse);
+      await deleteTodo(req, mockResponse);
 
       expect(Todo.findByIdAndDelete).toHaveBeenCalledWith(mockTodoId);
       expect(mockUser.todos).toEqual([]);
@@ -97,7 +97,7 @@ describe("TodoController", () => {
       };
       const req = { params: { id: mockTodoId }, user: { todos: [] } };
 
-      await TodoController.deleteTodo(req, mockResponse);
+      await deleteTodo(req, mockResponse);
 
       expect(Todo.findByIdAndDelete).toHaveBeenCalledWith(mockTodoId);
       expect(mockResponse.status).toHaveBeenCalledWith(404);
