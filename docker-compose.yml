@@ -4,6 +4,8 @@ services:
   mongodb:
     image: mongo:latest
     container_name: mongo
+    env_file:
+      - ./backend/.env
     ports:
       - "27017:27017"
     environment:
@@ -20,49 +22,33 @@ services:
     ports:
       - "5173:5173"
     environment:
-      - VITE_USER_SERVICE_URL=http://localhost:5000
-      - VITE_TODO_SERVICE_URL=http://localhost:5001
+      - VITE_BACKEND_URL=http://localhost:5000
     volumes:
       - ./frontend:/app
       - /app/node_modules
     networks:
       - todo-net
     depends_on:
-      - user-service
-      - todo-service
-  user-service:
-    build: ./backend/user-service
-    image: user-service
-    container_name: user-container
+      - backend
+  backend:
+    build: ./backend
+    image: todo-backend
+    container_name: todo-backend-container
     ports:
       - "5000:5000"
+    env_file:
+      - ./backend/.env
     environment:
-      - DATABASE_URL=mongodb://mongo:27017/todo-project
-      - TEST_DATABASE_URL=mongodb://mongo:27017/todo-test
+      - DATABASE_URL=mongodb://todo-user:w3rvNEgfKRz2NEl7@mongo:27017/todo-project?authSource=admin
+      - TEST_DATABASE_URL=mongodb://todo-user:w3rvNEgfKRz2NEl7@mongo:27017/todo-test?authSource=admin
       - JWT_SECRET=never_gonna_give_you_up
-      - JWT_EXPIRES_IN=86400
+      - JWT_EXPIRES_IN=7d
+      - PORT=5000
     volumes:
-      - ./backend/user-service:/user-service/app
-      - /user-service/app/node_modules
+      - ./backend:/app
+      - /app/node_modules
     networks:
       - todo-net
-  todo-service:
-    build: ./backend/todo-service
-    image: todo-service
-    container_name: todo-container
-    ports:
-      - "5001:5001"
-    environment:
-      - DATABASE_URL=mongodb://mongo:27017/todo-project
-      - TEST_DATABASE_URL=mongodb://mongo:27017/todo-test
-      - JWT_SECRET=never_gonna_give_you_up
-      - JWT_EXPIRES_IN=86400
-    volumes:
-      - ./backend/todo-service:/todo-service/app
-      - /todo-service/app/node_modules
-    networks:
-      - todo-net
-
 networks:
   todo-net:
     driver: bridge
