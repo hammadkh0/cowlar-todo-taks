@@ -5,8 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js",
-    "test": "set NODE_ENV=test&& jest"
+    "start": "set NODE_ENV=development&& nodemon index.js",
+    "test": "set NODE_ENV=test&& jest",
+    "start:docker": "set NODE_ENV=production&& node index.js"
   },
   "author": "",
   "license": "ISC",

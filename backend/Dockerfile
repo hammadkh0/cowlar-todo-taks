@@ -11,4 +11,4 @@ ENV DATABASE_URL=mongodb://mongo:27017/todo-project
 ENV JWT_SECRET=never_gonna_give_you_up
 ENV JWT_EXPIRES_IN=86400
 EXPOSE 5000
-CMD [ "npm", "start" ]
+CMD [ "npm", "start:docker" ]

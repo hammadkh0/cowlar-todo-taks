@@ -46,15 +46,21 @@ describe("User Authentication", () => {
   });
 
   test("should not signup a user with an existing email", async () => {
-    const res = await request(app).post("/api/v1/users/signup").send({
+    const user1 = await request(app).post("/api/v1/users/signup").send({
       name: "Test User",
       email: "testuser@example.com",
       password: "password123",
       image: "testimage.jpg",
     });
-    expect(res.statusCode).toEqual(400);
-    expect(res.body.status).toEqual("fail");
-    expect(res.body.message).toBeDefined();
+    const user2 = await request(app).post("/api/v1/users/signup").send({
+      name: "Test User",
+      email: "testuser@example.com",
+      password: "password123",
+      image: "testimage.jpg",
+    });
+    expect(user2.statusCode).toBe(400);
+    expect(user2.body.status).toEqual("fail");
+    expect(user2.body.message).toBeDefined();
   });
 
   test("should login an existing user", async () => {
