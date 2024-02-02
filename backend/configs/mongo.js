@@ -1,10 +1,14 @@
-import mongoose from "mongoose";
-import { variables } from "./variables.js";
+const mongoose = require("mongoose");
+const { variables } = require("./variables.js");
 
 // Connect to MongoDB
-export const connectToDB = async () => {
+exports.connectToDB = async () => {
+  console.log(variables.DATABASE_URL);
   mongoose
-    .connect(`${variables.DATABASE_URL}`)
+    .connect(`${variables.DATABASE_URL}`, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
     .then(() => {
       console.log("Connected to MongoDB");
     })

@@ -1,8 +1,8 @@
-import jwt from "jsonwebtoken";
-import { variables } from "../configs/variables.js";
-import { findUserById } from "../services/user-service.js";
+const jwt = require("jsonwebtoken");
+const { variables } = require("../configs/variables.js");
+const { findUserById } = require("../services/user-service.js");
 
-export const protect = (req, res, next) => {
+exports.protect = (req, res, next) => {
   if (!req.headers.authorization) {
     return res.status(401).json({ status: "fail", message: "Token not provided" });
   } else {

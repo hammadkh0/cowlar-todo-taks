@@ -1,10 +1,10 @@
-import request from "supertest";
-import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+const request = require("supertest");
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
-import User from "../../models/userModel";
-import app from "../server.js";
-import { variables } from "../../configs/variables";
+const User = require("../../models/userModel");
+const app = require("../server.js");
+const { variables } = require("../../configs/variables");
 
 beforeAll(async () => {
   await mongoose.connect(variables.DATABASE_URL, {

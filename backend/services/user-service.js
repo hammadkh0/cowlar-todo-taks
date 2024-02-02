@@ -1,6 +1,6 @@
-import User from "../models/userModel.js";
+const User = require("../models/userModel.js");
 
-export async function saveToDB(req, hashedPassword) {
+exports.saveToDB = async (req, hashedPassword) => {
   // create new user
   const newUser = new User({
     name: req.body.name,
@@ -10,14 +10,14 @@ export async function saveToDB(req, hashedPassword) {
   });
   await newUser.save();
   return newUser;
-}
+};
 
-export async function findExistingUser(email) {
+exports.findExistingUser = async (email) => {
   const user = await User.findOne({ email }).select("+password");
   return user;
-}
+};
 
-export async function findUserById(id) {
+exports.findUserById = async (id) => {
   const user = await User.findById(id);
   return user;
-}
+};

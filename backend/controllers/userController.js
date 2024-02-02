@@ -1,10 +1,11 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
-import { saveToDB, findExistingUser } from "../services/user-service.js";
-import { variables } from "../configs/variables.js";
+const { saveToDB, findExistingUser } = require("../services/user-service.js");
 
-export const signup = async (req, res) => {
+const { variables } = require("../configs/variables.js");
+
+exports.signup = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
     const newUser = await saveToDB(req, hashedPassword);
@@ -18,7 +19,7 @@ export const signup = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {

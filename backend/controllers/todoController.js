@@ -1,12 +1,12 @@
-import {
+const {
   getTodosFromDB,
   addNewTodoToUser,
   saveNewTodosInUser,
   deleteTodoFromUser,
   updateTodoInDB,
-} from "../services/todo-service.js";
+} = require("../services/todo-service.js");
 
-export const getAllTodos = async (req, res) => {
+exports.getAllTodos = async (req, res) => {
   try {
     const userTodos = req.user.todos;
     // get the todos present in user
@@ -18,7 +18,7 @@ export const getAllTodos = async (req, res) => {
   }
 };
 
-export const createTodo = async (req, res) => {
+exports.createTodo = async (req, res) => {
   try {
     const user = req.user;
     const newTodo = await addNewTodoToUser(user, req.body);
@@ -28,7 +28,7 @@ export const createTodo = async (req, res) => {
   }
 };
 
-export const saveAllTodos = async (req, res) => {
+exports.saveAllTodos = async (req, res) => {
   try {
     // get all todos from req.body
     const todosToSave = req.body.todos;
@@ -42,7 +42,7 @@ export const saveAllTodos = async (req, res) => {
   }
 };
 
-export const deleteTodo = async (req, res) => {
+exports.deleteTodo = async (req, res) => {
   try {
     const todoId = req.params.id;
     // delete todo from db and return it.
@@ -53,7 +53,7 @@ export const deleteTodo = async (req, res) => {
   }
 };
 
-export const updateTodo = async (req, res) => {
+exports.updateTodo = async (req, res) => {
   try {
     const todo = await updateTodoInDB(req.params.id);
     res.status(200).json({ status: "success", todo });

@@ -1,9 +1,10 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
 
-import userRoutes from "../routes/userRoutes";
-import { connectToDB } from "../configs/mongo";
+const userRoutes = require("../routes/userRoutes");
+const { connectToDB } = require("../configs/mongo");
+
 dotenv.config();
 
 const app = express();

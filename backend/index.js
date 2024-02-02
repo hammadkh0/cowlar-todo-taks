@@ -1,10 +1,10 @@
-import express from "express";
-import cors from "cors";
+const express = require("express");
+const cors = require("cors");
 
-import userRoutes from "./routes/userRoutes.js";
-import todoRoutes from "./routes/todoRoutes.js";
-import { connectToDB } from "./configs/mongo.js";
-import { variables } from "./configs/variables.js";
+const userRoutes = require("./routes/userRoutes.js");
+const todoRoutes = require("./routes/todoRoutes.js");
+const { connectToDB } = require("./configs/mongo.js");
+const { variables } = require("./configs/variables.js");
 
 const app = express();
 app.use(cors());
@@ -24,4 +24,4 @@ connectToDB().then(() => {
   });
 });
 
-export default app;
+module.exports = app;

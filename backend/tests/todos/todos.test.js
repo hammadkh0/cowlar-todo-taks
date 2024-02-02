@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
-import { getAllTodos, deleteTodo } from "../../controllers/todoController";
-import Todo from "../../models/todoModel.js";
-import { variables } from "../../configs/variables.js";
+const { getAllTodos, deleteTodo } = require("../../controllers/todoController");
+const Todo = require("../../models/todoModel.js");
+const { variables } = require("../../configs/variables.js");
 
 // Mocking the required models
 jest.mock("../../models/todoModel.js");
