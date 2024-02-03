@@ -1,0 +1,69 @@
+name: Node.js Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-node-app:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+
+    services:
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
+        options: --name mongodb
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Install MongoDB
+      - name: Install MongoDB in Linux
+        run: |
+          sudo apt dist-upgrade
+          sudo apt-get install gnupg curl
+          curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
+          echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-org
+          sudo systemctl start mongod
+          sudo systemctl status mongod
+          sudo systemctl enable mongod
+
+      # Create MongoDB User
+      - name: Create MongoDB User
+        run: |
+          mongosh --eval "db.getSiblingDB('admin').createUser({ user: 'todo-user', pwd: 'w3rvNEgfKRz2NEl7', roles: [{ role: 'readWrite', db: 'todo-test' }] })"
+
+      # Test MongoDB Connection
+      - name: Test MongoDB Connection
+        run: |
+          mongosh --eval "db.getSiblingDB('admin').auth('todo-user', 'w3rvNEgfKRz2NEl7')"
+
+      # Steps for the application
+      - name: Install dependencies for backend api
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+    env:
+      LOCAL_TEST_DATABASE_URL: mongodb://todo-user:w3rvNEgfKRz2NEl7@127.0.0.1:27017/todo-test?authMechanism=SCRAM-SHA-1&authSource=admin
+      JWT_SECRET: never_gonna_give_you_up
+      JWT_EXPIRES_IN: 7d
+      PORT: 5000
